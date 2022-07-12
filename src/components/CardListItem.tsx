@@ -1,9 +1,9 @@
 import { Action, ActionPanel, Color, Icon, List } from "@raycast/api";
-import { useRecentRemover } from "../hooks/useRecent";
 
 import { ColorMap } from "../util/mapping";
 import { ICard } from "../util/types";
 import CardDetail from "./CardDetail";
+import CommonCardActions from "./CommonCardActions";
 
 interface CardListItemProps {
   card: ICard;
@@ -11,8 +11,6 @@ interface CardListItemProps {
 }
 
 const CardListItem = ({ card, refreshList }: CardListItemProps) => {
-  const { found, removeFromRecents } = useRecentRemover(card);
-
   return (
     <List.Item
       title={card.data.name}
@@ -23,18 +21,7 @@ const CardListItem = ({ card, refreshList }: CardListItemProps) => {
       actions={
         <ActionPanel>
           <Action.Push title="View Card" icon={Icon.TextDocument} target={<CardDetail card={card} />} />
-          <Action.CopyToClipboard title="Copy HTML" icon={Icon.Clipboard} content={card.data.html} />
-          <Action.CopyToClipboard title="Copy Markdown" icon={Icon.Clipboard} content={card.data.markup} />
-          {found && (
-            <Action
-              title="Remove from Recents"
-              icon={Icon.XmarkCircle}
-              onAction={() => {
-                removeFromRecents();
-                refreshList && refreshList();
-              }}
-            />
-          )}
+          <CommonCardActions card={card} refreshList={refreshList} />
         </ActionPanel>
       }
     />
