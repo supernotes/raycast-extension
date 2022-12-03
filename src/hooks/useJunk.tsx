@@ -4,7 +4,7 @@ import { Toast, getPreferenceValues, showToast } from "@raycast/api";
 import fetch from "node-fetch";
 
 import { SUPERNOTES_API_URL } from "utils/defines";
-import { SupernotesErrorPayload } from "utils/types";
+import { WrappedCardResponses } from "utils/types";
 
 const useJunk = (successCallback: () => void) => {
   const { apiKey } = getPreferenceValues();
@@ -25,10 +25,12 @@ const useJunk = (successCallback: () => void) => {
         headers: { "Api-Key": apiKey },
       });
       setLoading(false);
-      if (res.status !== 200) {
-        const jsonError = await res.json();
-        throw new Error((jsonError as SupernotesErrorPayload).detail);
-      }
+      const jsonError = (await res.json()) as WrappedCardResponses;
+      const wrapped_card = jsonError[0];
+      // error checking
+      if (wrapped_card.card_id !== cardId) throw new Error("Card ID mismatch");
+      if (!wrapped_card.success) throw new Error(wrapped_card.payload);
+      // success
       toast.style = Toast.Style.Success;
       toast.title = "Success";
       toast.message = "Card junked";

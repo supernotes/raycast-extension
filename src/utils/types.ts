@@ -2,9 +2,25 @@ export interface SupernotesErrorPayload {
   detail: string;
 }
 
+export interface WrappedResponse {
+  success: boolean;
+  card_id: string;
+  status_code: number;
+  payload: ICard | string;
+}
+export interface WrappedCard extends WrappedResponse {
+  success: true;
+  payload: ICard;
+}
+export interface WrappedError extends WrappedResponse {
+  success: false;
+  payload: string;
+}
+
+export type WrappedCardResponses = Array<WrappedCard | WrappedError>;
+
 export type IStatus = [-2, -1, 0, 1, 2];
 export type IVisibility = [-1, 0, 1];
-
 export type ICardCollection = Record<string, ICard>;
 
 export interface ICard {
