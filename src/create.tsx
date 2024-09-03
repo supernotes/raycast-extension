@@ -1,13 +1,11 @@
+import { Action, ActionPanel, Form } from "@raycast/api";
 import React from "react";
 
-import { Action, ActionPanel, Form } from "@raycast/api";
-
-import useCreate, { SimpleCardData } from "hooks/useCreate";
-import { ICard } from "utils/types";
-
 import CardDetail from "components/CardDetail";
+import useCreate from "hooks/useCreate";
+import type { ICard, ISimpleCard } from "utils/types";
 
-const CreateCard = ({ draftValues }: { draftValues?: SimpleCardData }) => {
+const CreateCard = ({ draftValues }: { draftValues?: ISimpleCard }) => {
   const [markupError, setMarkupError] = React.useState<string | undefined>();
   const [createdCard, setCreatedCard] = React.useState<ICard>();
 
