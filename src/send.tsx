@@ -9,52 +9,66 @@ import { ICardCollection } from "utils/types";
 
 type ClippingType = "selection" | "clipboard";
 
+interface Clipping {
+  type?: ClippingType;
+  selected?: string;
+  clipboard?: string;
+}
+
 const SendClipping = () => {
   const [resultCards, setResultCards] = React.useState<ICardCollection>();
   const { search, loading: searchLoading } = useSearch((results) => setResultCards(results));
-
   const { cards: recentCards, loading: recentsLoading } = useRecentCards();
 
-  const [clippingType, setClippingType] = React.useState<ClippingType>("selection");
-  const [clipLoading, setClipLoading] = React.useState(false);
-  const [clipping, setClipping] = React.useState<string>();
+  const [clipping, setClipping] = React.useState<Clipping>({});
   React.useEffect(() => {
-    setClipLoading(true);
-    const prom = clippingType === "selection" ? getSelectedText() : Clipboard.readText();
-    prom
-      .then((text) => setClipping(text?.length ? text : undefined))
-      .catch((err) => {
-        console.log(err);
-        setClipping(undefined);
-      })
-      .finally(() => setClipLoading(false));
-  }, [clippingType]);
+    Promise.allSettled([getSelectedText(), Clipboard.readText()]).then(([selected, clipboard]) => {
+      const selectedVal =
+        selected.status === "fulfilled" && selected.value.length ? selected.value : undefined;
+      const clipboardVal =
+        clipboard.status === "fulfilled" && clipboard.value?.length ? clipboard.value : undefined;
+      setClipping({
+        type: selectedVal ? "selection" : clipboardVal ? "clipboard" : undefined,
+        selected: selectedVal,
+        clipboard: clipboardVal,
+      });
+    });
+  }, []);
 
-  const Detail = <List.Item.Detail isLoading={clipLoading} markdown={clipping} />;
+  const currentText = clipping.type === "selection" ? clipping.selected : clipping.clipboard;
+  const hasClipping = !!currentText;
+  const Detail = <List.Item.Detail markdown={currentText} />;
 
   return (
     <List
       throttle
       isLoading={searchLoading || recentsLoading}
-      isShowingDetail={!!clipping}
+      isShowingDetail={hasClipping}
       onSearchTextChange={search}
-      searchBarPlaceholder="Send your selection somewhere..."
+      searchBarPlaceholder="Send your clipping somewhere..."
       searchBarAccessory={
-        <List.Dropdown
-          tooltip="Select clipping type"
-          storeValue={true}
-          onChange={(value) => setClippingType(value as ClippingType)}
-        >
-          <List.Dropdown.Item title="selection" value="selection" />
-          <List.Dropdown.Item title="clipboard" value="clipboard" />
-        </List.Dropdown>
+        hasClipping ? (
+          <List.Dropdown
+            tooltip="Select clipping type"
+            value={clipping.type}
+            onChange={(value) => setClipping((p) => ({ ...p, type: value as ClippingType }))}
+          >
+            {clipping.selected && <List.Dropdown.Item title="selection" value="selection" />}
+            {clipping.clipboard && <List.Dropdown.Item title="clipboard" value="clipboard" />}
+          </List.Dropdown>
+        ) : undefined
       }
     >
-      {clipping ? (
+      {currentText ? (
         <>
           {resultCards ? (
             Object.values(resultCards).map((card) => (
-              <CardAppendListItem key={card.data.id} card={card} detail={Detail} text={clipping} />
+              <CardAppendListItem
+                key={card.data.id}
+                card={card}
+                detail={Detail}
+                text={currentText}
+              />
             ))
           ) : (
             <>
@@ -64,7 +78,10 @@ const SendClipping = () => {
                 detail={Detail}
                 actions={
                   <ActionPanel>
-                    <Action onAction={() => sendToDaily(clipping)} title="Append to Daily card" />
+                    <Action
+                      onAction={() => sendToDaily(currentText)}
+                      title="Append to Daily card"
+                    />
                   </ActionPanel>
                 }
               />
@@ -74,7 +91,7 @@ const SendClipping = () => {
                 detail={Detail}
                 actions={
                   <ActionPanel>
-                    <Action onAction={() => sendToNew(clipping)} title="Create new card" />
+                    <Action onAction={() => sendToNew(currentText)} title="Create new card" />
                   </ActionPanel>
                 }
               />
@@ -84,7 +101,7 @@ const SendClipping = () => {
                     key={card.data.id}
                     card={card}
                     detail={Detail}
-                    text={clipping}
+                    text={currentText}
                   />
                 ))}
               </List.Section>
@@ -95,7 +112,7 @@ const SendClipping = () => {
         <List.EmptyView
           icon={Icon.TextSelection}
           title={
-            clippingType === "selection"
+            clipping.type === "selection"
               ? "Select some text to get started"
               : "Copy text to your clipboard to get started"
           }
