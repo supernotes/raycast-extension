@@ -1,5 +1,13 @@
-export interface SupernotesErrorPayload {
+import { Status, Visibility } from "./defines";
+
+export interface StandardError {
   detail: string;
+}
+
+export interface ValidationError {
+  errors: {
+    body?: string;
+  };
 }
 
 export interface WrappedResponse {
@@ -18,9 +26,6 @@ export interface WrappedError extends WrappedResponse {
 }
 
 export type WrappedCardResponses = Array<WrappedCard | WrappedError>;
-
-export type IStatus = [-2, -1, 0, 1, 2];
-export type IVisibility = [-1, 0, 1];
 export type ICardCollection = Record<string, ICard>;
 
 export interface ICard {
@@ -29,25 +34,29 @@ export interface ICard {
   links: Record<string, IParentLink>;
 }
 
-export interface ICardMembership {
+export type ICardMembership = {
   id: string;
-  perms: number;
+  liked: boolean | null;
   personal_tags: Array<string>;
-  color: null | string;
-  created_when: string;
-  interacted_when: string;
-  modified_when: null | string;
-  has_commented: boolean;
-  enrolled: null | boolean;
-  is_context: null | boolean;
-  status: IStatus;
-  visibility: IVisibility;
-  held_total_child_count: number;
-  held_published_child_count: number;
-  liked: null | boolean;
+  personal_color: string | null;
+  perms: number;
   via_type: number;
-  via_id: null | string;
-}
+  via_id: string | null;
+  created_when: string;
+  modified_when: string;
+  enrolled_when: string | null;
+  opened_when: string | null;
+  auto_publish_children: boolean | null;
+  view: {
+    display_type: number;
+    sort_type: number;
+    sort_ascending: boolean;
+  } | null;
+  visibility: Visibility;
+  status: Status;
+  total_child_count: number;
+  share_link_count: number;
+};
 
 export interface ICardData {
   id: string;
@@ -55,6 +64,7 @@ export interface ICardData {
   name: string;
   markup: string;
   html: string;
+  ydoc: string;
   icon: string | null;
   frozen: boolean | null;
   backlinks: Record<string, IBacklink>;
@@ -64,14 +74,14 @@ export interface ICardData {
   modified_by_id: string | null;
   synced_when: string | null;
   targeted_when: string | null;
-  status: IStatus;
+  status: Status;
   member_count: number;
+  color: string | null;
   comment_count: number;
   published_child_count: number;
   likes: number;
   import_id?: string;
 }
-
 export interface IBacklink {
   back_id: string;
   fore_id: string;
@@ -88,7 +98,7 @@ export interface IParentLink {
     granted_perms: number;
     archived: boolean;
   };
-  status: IStatus;
+  status: Status;
   temp?: boolean;
   cutting?: boolean;
 }

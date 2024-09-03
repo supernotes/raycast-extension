@@ -4,7 +4,7 @@ import { Toast, getPreferenceValues, showToast } from "@raycast/api";
 import fetch from "node-fetch";
 
 import { SUPERNOTES_API_URL } from "utils/defines";
-import { ICard, WrappedCardResponses } from "utils/types";
+import { ICard, ValidationError, WrappedCardResponses } from "utils/types";
 
 export interface SimpleCardData {
   name: string;
@@ -30,7 +30,8 @@ const useCreate = (successCallback: (card: ICard) => void) => {
         body: JSON.stringify({ name: data.name, markup: data.markup }),
         headers: { "Api-Key": apiKey, "Content-Type": "application/json" },
       });
-      const jsonData = (await res.json()) as WrappedCardResponses;
+      const jsonData = (await res.json()) as WrappedCardResponses | ValidationError;
+      if ("errors" in jsonData) throw new Error(jsonData.errors.body);
       const wrapped_card = jsonData[0];
       // error checking
       if (!wrapped_card.success) throw new Error(wrapped_card.payload);
