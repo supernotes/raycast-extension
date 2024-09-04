@@ -17,25 +17,25 @@ const useJunk = (successCallback: () => void) => {
       title: "Junking",
       message: "Moving card to junk",
     });
-    try {
-      const fetched = await superfetch("/v1/cards", "patch", {
-        apiKey,
-        body: { [cardId]: { membership: { status: Status.DISABLED } } },
-      });
-      setLoading(false);
-      if (!fetched.ok) throw new Error(fetched.body.detail);
-      const wrappedCard = fetched.body[0];
-      if (!wrappedCard.success) throw new Error(wrappedCard.payload);
-      if (wrappedCard.card_id !== cardId) throw new Error("Card mismatch");
-      toast.style = Toast.Style.Success;
-      toast.title = "Success";
-      toast.message = "Card junked";
-      successCallback();
-    } catch (err) {
-      toast.style = Toast.Style.Failure;
-      toast.title = "Failed";
-      toast.message = String(err);
+    const fetched = await superfetch("/v1/cards", "patch", {
+      apiKey,
+      body: { [cardId]: { membership: { status: Status.DISABLED } } },
+    });
+    setLoading(false);
+    if (!fetched.ok) {
+      showToast(Toast.Style.Failure, "Junk failed", fetched.body.detail);
+      return;
     }
+    const wrappedCard = fetched.body[0];
+    if (!wrappedCard.success) {
+      showToast(Toast.Style.Failure, "Junk failed", wrappedCard.payload);
+      return;
+    }
+    if (wrappedCard.card_id !== cardId) throw new Error("Card mismatch");
+    toast.style = Toast.Style.Success;
+    toast.title = "Success";
+    toast.message = "Card junked";
+    successCallback();
     setTimeout(() => toast.hide(), 3000);
   };
 

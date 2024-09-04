@@ -42,7 +42,9 @@ type ApiPathObject<PM> = FilterKeys<RequestParams<PM>, "path">;
 type ApiResponseData<O> = O extends { responses: any } ? SuccessContent<O["responses"]> : null;
 
 export type ApiRequestOptions<PM> =
-  undefined extends RequestBodyJSON<PM> ? RequestParams<PM> : RequestParams<PM> & { body: RequestBodyJSON<PM> };
+  undefined extends RequestBodyJSON<PM>
+    ? RequestParams<PM>
+    : RequestParams<PM> & { body: RequestBodyJSON<PM> };
 
 interface FetchGoodResult<PM> {
   ok: true;
@@ -100,6 +102,17 @@ export const superfetch = async <P extends keyof paths, M extends keyof paths[P]
       method: method.toUpperCase(),
       body: JSON.stringify(body),
     });
+    if (response.status >= 500) {
+      return {
+        ok: false as const,
+        body: {
+          type: "connection",
+          status: null,
+          detail: "Internal Server Error",
+        } as IntegratedError,
+        response,
+      };
+    }
     const responseJson = await response.json();
     return response.ok
       ? {

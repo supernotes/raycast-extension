@@ -12,30 +12,23 @@ const useCreate = (successCallback: (card: ICard) => void) => {
 
   const create = async (data: ISimpleCard) => {
     setLoading(true);
-    const toast = await showToast({
-      style: Toast.Style.Animated,
-      title: "Creating",
-      message: "Sending card to Supernotes",
+    await showToast(Toast.Style.Animated, "Creating", "Sending card to Supernotes");
+    const fetched = await superfetch("/v1/cards/simple", "post", {
+      body: { name: data.name, markup: data.markup },
+      apiKey,
     });
-    try {
-      const fetched = await superfetch("/v1/cards/simple", "post", {
-        body: { name: data.name, markup: data.markup },
-        apiKey,
-      });
-      if (!fetched.ok) throw new Error(fetched.body.detail);
-      const wrappedCard = fetched.body[0];
-      if (!wrappedCard.success) throw new Error(wrappedCard.payload);
-      toast.style = Toast.Style.Success;
-      toast.title = "Success";
-      toast.message = "Card created";
-      successCallback(wrappedCard.payload);
-    } catch (err) {
-      toast.style = Toast.Style.Failure;
-      toast.title = "Card Creation Failed";
-      toast.message = String(err);
+    if (!fetched.ok) {
+      showToast(Toast.Style.Failure, "Card Creation Failed", fetched.body.detail);
+      return;
     }
+    const wrappedCard = fetched.body[0];
+    if (!wrappedCard.success) {
+      showToast(Toast.Style.Failure, "Card Creation Failed", wrappedCard.payload);
+      return;
+    }
+    await showToast(Toast.Style.Success, "Success", "Card created");
+    successCallback(wrappedCard.payload);
     setLoading(false);
-    setTimeout(() => toast.hide(), 3000);
   };
 
   return { create, loading };
