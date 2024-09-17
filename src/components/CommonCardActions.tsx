@@ -1,9 +1,9 @@
 import { Action, Icon, popToRoot } from "@raycast/api";
 
-import useJunk from "hooks/useJunk";
-import { useRecentRemover } from "hooks/useRecent";
-import { SUPERNOTES_APP_CUSTOM_SCHEME } from "utils/defines";
-import { ICard } from "utils/types";
+import useJunk from "~/hooks/useJunk";
+import { useRecentRemover } from "~/hooks/useRecent";
+import { SUPERNOTES_APP_CUSTOM_SCHEME } from "~/utils/defines";
+import { ICard } from "~/utils/types";
 
 import CardDetail from "./CardDetail";
 
@@ -36,10 +36,16 @@ const CommonCardActions = ({ card, removeFromList }: CommonCardActionsProps) => 
         icon={Icon.ArrowNe}
         url={`${SUPERNOTES_APP_CUSTOM_SCHEME}?preview=${card.data.id}`}
       />
-      <Action.CopyToClipboard title="Copy Markdown" icon={Icon.QuoteBlock} content={card.data.markup} />
+      <Action.CopyToClipboard
+        title="Copy Markdown"
+        icon={Icon.QuoteBlock}
+        content={card.data.markup}
+      />
       <Action.CopyToClipboard title="Copy HTML" icon={Icon.CodeBlock} content={card.data.html} />
       <Action title="Junk Card" icon={Icon.Trash} onAction={() => junk(card.data.id)} />
-      {found && <Action title="Remove from Recently Viewed" icon={Icon.XMarkCircle} onAction={remove} />}
+      {found && (
+        <Action title="Remove from Recently Viewed" icon={Icon.XMarkCircle} onAction={remove} />
+      )}
     </>
   );
 };

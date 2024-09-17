@@ -1,9 +1,9 @@
-import { Toast, showToast } from "@raycast/api";
+import { showToast, Toast } from "@raycast/api";
 import { superfetch } from "api/superfetch";
 import React from "react";
 
-import { getSupernotesPrefs } from "utils/helpers";
-import type { ICard, ISimpleCard } from "utils/types";
+import { getSupernotesPrefs } from "~/utils/helpers";
+import type { ICard, ISimpleCard } from "~/utils/types";
 
 const useCreate = (successCallback: (card: ICard) => void) => {
   const { apiKey } = getSupernotesPrefs();

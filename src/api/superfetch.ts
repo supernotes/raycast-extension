@@ -1,8 +1,8 @@
 import { size } from "lodash";
 import fetch, { Headers, Response } from "node-fetch";
 
-import { SUPERNOTES_API_ROOT } from "utils/defines";
-import { IntegratedError, UnifiedError } from "utils/types";
+import { SUPERNOTES_API_ROOT } from "~/utils/defines";
+import { IntegratedError, UnifiedError } from "~/utils/types";
 
 import { paths } from "./schema";
 

@@ -1,9 +1,9 @@
-import { Toast, showToast } from "@raycast/api";
+import { showToast, Toast } from "@raycast/api";
 import { superfetch } from "api/superfetch";
 import React from "react";
 
-import { getSupernotesPrefs } from "utils/helpers";
-import { ICardCollection } from "utils/types";
+import { getSupernotesPrefs } from "~/utils/helpers";
+import { ICardCollection } from "~/utils/types";
 
 const useSearch = (callback: (cards?: ICardCollection) => void) => {
   const { apiKey } = getSupernotesPrefs();

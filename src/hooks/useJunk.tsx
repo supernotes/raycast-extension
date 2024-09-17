@@ -1,9 +1,9 @@
-import { Toast, showToast } from "@raycast/api";
+import { showToast, Toast } from "@raycast/api";
 import { superfetch } from "api/superfetch";
 import React from "react";
 
-import { Status } from "utils/defines";
-import { getSupernotesPrefs } from "utils/helpers";
+import { Status } from "~/utils/defines";
+import { getSupernotesPrefs } from "~/utils/helpers";
 
 const useJunk = (successCallback: () => void) => {
   const { apiKey } = getSupernotesPrefs();

@@ -1,4 +1,4 @@
-import { components } from "../api/schema";
+import { components } from "~/api/schema";
 
 export interface StandardError {
   detail: string;

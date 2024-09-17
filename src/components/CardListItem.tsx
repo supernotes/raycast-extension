@@ -1,9 +1,9 @@
 import { Action, ActionPanel, Icon, List } from "@raycast/api";
 
-import CommonCardActions, { ViewCardAction } from "components/CommonCardActions";
-import { determineCardColor } from "utils/mapping";
-import { sendToCard } from "utils/senders";
-import { ICard } from "utils/types";
+import CommonCardActions, { ViewCardAction } from "~/components/CommonCardActions";
+import { determineCardColor } from "~/utils/mapping";
+import { sendToCard } from "~/utils/senders";
+import { ICard } from "~/utils/types";
 
 interface CardDetailListItemProps {
   card: ICard;

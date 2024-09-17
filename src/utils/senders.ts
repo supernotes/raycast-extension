@@ -1,8 +1,8 @@
-import { PopToRootType, Toast, popToRoot, showHUD, showToast } from "@raycast/api";
-import { superfetch } from "api/superfetch";
+import { popToRoot, PopToRootType, showHUD, showToast, Toast } from "@raycast/api";
 
-import { getSupernotesPrefs, textToSimpleCard } from "./helpers";
-import type { ICard } from "./types";
+import { superfetch } from "~/api/superfetch";
+import { getSupernotesPrefs, textToSimpleCard } from "~/utils/helpers";
+import type { ICard } from "~/utils/types";
 
 export async function sendToDaily(text: string) {
   const { apiKey } = getSupernotesPrefs();

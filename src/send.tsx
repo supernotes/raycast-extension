@@ -1,11 +1,11 @@
-import { Action, ActionPanel, Clipboard, Icon, List, getSelectedText } from "@raycast/api";
+import { Action, ActionPanel, Clipboard, getSelectedText, Icon, List } from "@raycast/api";
 import React from "react";
 
-import { CardAppendListItem } from "components/CardListItem";
-import { useRecentCards } from "hooks/useRecent";
-import useSearch from "hooks/useSearch";
-import { sendToDaily, sendToNew } from "utils/senders";
-import { ICardCollection } from "utils/types";
+import { CardAppendListItem } from "~/components/CardListItem";
+import { useRecentCards } from "~/hooks/useRecent";
+import useSearch from "~/hooks/useSearch";
+import { sendToDaily, sendToNew } from "~/utils/senders";
+import { ICardCollection } from "~/utils/types";
 
 type ClippingType = "selection" | "clipboard";
 

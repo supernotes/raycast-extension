@@ -1,10 +1,10 @@
 import { List } from "@raycast/api";
 import React from "react";
 
-import { CardDetailListItem } from "components/CardListItem";
-import { useRecentCards } from "hooks/useRecent";
-import useSearch from "hooks/useSearch";
-import { ICardCollection } from "utils/types";
+import { CardDetailListItem } from "~/components/CardListItem";
+import { useRecentCards } from "~/hooks/useRecent";
+import useSearch from "~/hooks/useSearch";
+import { ICardCollection } from "~/utils/types";
 
 const CardSearch = () => {
   const [resultCards, setResultCards] = React.useState<ICardCollection>();
@@ -36,7 +36,11 @@ const CardSearch = () => {
         : recentCards && (
             <List.Section title="Recently Viewed">
               {recentCards.map((card) => (
-                <CardDetailListItem key={card.data.id} card={card} removeFromList={removeFromResults} />
+                <CardDetailListItem
+                  key={card.data.id}
+                  card={card}
+                  removeFromList={removeFromResults}
+                />
               ))}
             </List.Section>
           )}

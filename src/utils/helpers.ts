@@ -1,6 +1,6 @@
 import { getPreferenceValues } from "@raycast/api";
 
-import type { ISimpleCard } from "./types";
+import type { ISimpleCard } from "~/utils/types";
 
 // Typed getPreferenceValues
 export const getSupernotesPrefs = getPreferenceValues<ExtensionPreferences>;
