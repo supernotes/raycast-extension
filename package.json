@@ -34,6 +34,27 @@
       ]
     },
     {
+      "name": "daily",
+      "title": "Quick Daily",
+      "subtitle": "Supernotes",
+      "description": "Quickly append content to your Supernotes daily card.",
+      "mode": "no-view",
+      "arguments": [
+        {
+          "name": "content",
+          "placeholder": "Content",
+          "type": "text",
+          "required": true
+        }
+      ],
+      "keywords": [
+        "sn",
+        "quick",
+        "daily",
+        "card"
+      ]
+    },
+    {
       "name": "create",
       "title": "Create Card",
       "subtitle": "Supernotes",

@@ -18,6 +18,8 @@ declare type Preferences = ExtensionPreferences
 declare namespace Preferences {
   /** Preferences accessible in the `send` command */
   export type Send = ExtensionPreferences & {}
+  /** Preferences accessible in the `daily` command */
+  export type Daily = ExtensionPreferences & {}
   /** Preferences accessible in the `create` command */
   export type Create = ExtensionPreferences & {}
   /** Preferences accessible in the `search` command */
@@ -27,6 +29,11 @@ declare namespace Preferences {
 declare namespace Arguments {
   /** Arguments passed to the `send` command */
   export type Send = {}
+  /** Arguments passed to the `daily` command */
+  export type Daily = {
+  /** Content */
+  "content": string
+}
   /** Arguments passed to the `create` command */
   export type Create = {}
   /** Arguments passed to the `search` command */
