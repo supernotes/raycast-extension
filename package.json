@@ -90,9 +90,7 @@
   ],
   "dependencies": {
     "@raycast/api": "^1.81.2",
-    "lodash": "^4.17.21",
-    "node-fetch": "^3.3.0",
-    "ts-pattern": "^5.3.1"
+    "node-fetch": "^3.3.0"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
