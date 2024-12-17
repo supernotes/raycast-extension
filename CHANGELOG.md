@@ -1,6 +1,6 @@
 # Supernotes Changelog
 
-## [Daily Append Local Time]
+## [Daily Append Local Time] - 2024-12-16
 - Use the local day when appending content to a daily card
 
 ## [Quick Daily Command] - 2024-11-27
